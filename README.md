@@ -13,20 +13,20 @@ The paper's pseudocode for the simplest version of the algorithm is as follows:
 
 N=total features
 K=number of selected features
-
+```
 for n = 1...N do	s[n] ← mut_inf(Y,n)for k = 1...K do	nu[k] = arg max (n) s[n] for n = 1...N do	s[n] ← min(s[n],conditional_mut_inf(Y,n | nu[k]))
-
+```
 
 	
 In my understanding, there seems to be an omission in the paper: since K is not preselected, there needs to be a termination condition that activates when there are no features that add information conditional on the already selected features, and we iterate on the already selected K' variables, not K.
 
 The 'fast' implementation of this algorithm takes advantage of the fact that a score s[n] can only decrease as the algorithm iterates.  Consequently, we do not need to calculate an updated score s[n] for feature n if it is lower than the best up-to-date score for features 1,..,n-1.  The given fast version pseudocode is:
 
-for n = 1...N do	ps[n] ← mut_inf(Y,n) 
+```for n = 1...N do	ps[n] ← mut_inf(Y,n) 
 	m[n] ← 0for k = 1...K do
  s* ← 0	for n = 1...N do		while ps[n]>s* and m[n] <k−1 do			m[n] ← m[n]+1			ps[n] ← min(ps[n],cond_mut_inf(Y,n,nu[m[n]]))
 		 if ps[n] > s* then			s* ← ps[n] nu[k] ← n
-
+```
 If most features are irrelevant or redundant, this cuts down on a lot of iterations.
 
 
