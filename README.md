@@ -37,11 +37,12 @@ Implementation Notes
 The joint entropy calculation is based off of the implementation at
 http://orange.biolab.si/blog/2012/06/15/joint-entropy-in-python/.
 
+```
 def entropy(*X):
     return(np.sum(-p * np.log2(p) if p > 0 else 0 for p in
         (np.mean(reduce(np.logical_and, (predictions == c for predictions, c in zip(X, classes))))
             for classes in itertools.product(*[set(x) for x in X]))))
-
+```
 The set() operation in itertools.product, while elegantly allowing for the random variables taking any number of values, was very computationally expensive.  Since I know, however, that all inputs to this algorithm should be binary, I replaced it with *[(0,1) for x in range(0,n_elements)]; for even small samples(1000 observations, 3 R.V.) this was about 450 times faster.
 
 The primary bottleneck for dense input is that the cond inf/entropy calculation uses too much python, and should probably be replaced with cython/smarter numpy calls(i.e., using numpy's reduce instead of python's reduce).
