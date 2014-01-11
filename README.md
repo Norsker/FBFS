@@ -47,5 +47,7 @@ The set() operation in itertools.product, while elegantly allowing for the rando
 
 The primary bottleneck for dense input is that the cond inf/entropy calculation uses too much python, and should probably be replaced with cython/smarter numpy calls(i.e., using numpy's reduce instead of python's reduce).
 
-That said, the primary problem right now is the handling of sparse input; I'm going to need to figure out how to properly calculate entropy without leaving csc format, because converting the selected columns to dense format in the calculation of conditional information unsurprisingly adds an enormous amount of computational time.  In the short term, I could alter the conditional_inf function to take X,y instead of X, and keep the y vector stored in dense format from the beginning, since y is used in every joint entropy calculation.  
+That said, the primary problem right now is the handling of sparse input; I'm going to need to figure out how to properly calculate entropy without leaving csc format, because converting the selected columns to dense format in the calculation of conditional information unsurprisingly adds an enormous amount of computational time. Scipy doesn't seem to support conditional slicing of sparse matrices.
+
+In the short term, I could alter the conditional_inf function to take X,y instead of X, and keep the y vector stored in dense format from the beginning, since y is used in every joint entropy calculation.  
 
